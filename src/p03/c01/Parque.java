@@ -2,33 +2,36 @@ package src.p03.c01;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Parque implements IParque{
-
-
-	// TODO 
+	
+	private static final int MAX = 50;
 	private int contadorPersonasTotales;
 	private Hashtable<String, Integer> contadoresPersonasPuerta;
+	private int maxi;
 	
-	
-	public Parque() {	// TODO
+	public Parque() {
 		contadorPersonasTotales = 0;
 		contadoresPersonasPuerta = new Hashtable<String, Integer>();
-		// TODO
+		this.maxi = MAX;
 	}
 
-
 	@Override
-	public void entrarAlParque(String puerta){		// TODO
+	public synchronized void entrarAlParque(String puerta){		
 		
 		// Si no hay entradas por esa puerta, inicializamos
 		if (contadoresPersonasPuerta.get(puerta) == null){
 			contadoresPersonasPuerta.put(puerta, 0);
 		}
 		
-		// TODO
+		try {
+			comprobarAntesDeEntrar();
+		} catch (InterruptedException e) {
+			return;
+		}
 				
-		
 		// Aumentamos el contador total y el individual
 		contadorPersonasTotales++;		
 		contadoresPersonasPuerta.put(puerta, contadoresPersonasPuerta.get(puerta)+1);
@@ -36,16 +39,36 @@ public class Parque implements IParque{
 		// Imprimimos el estado del parque
 		imprimirInfo(puerta, "Entrada");
 		
-		// TODO
+		checkInvariante();
 		
-		
-		// TODO
+		notifyAll();
 		
 	}
 	
 	@Override
 	public void salirDelParque(String puerta) {
-		// TODO Auto-generated method stub
+
+		// Si no hay entradas por esa puerta, inicializamos
+		if (contadoresPersonasPuerta.get(puerta) == null){
+			contadoresPersonasPuerta.put(puerta, 0);
+		}
+		
+		try {
+			comprobarAntesDeSalir();
+		} catch (InterruptedException e) {
+			return;
+		}
+				
+		// Aumentamos el contador total y el individual
+		contadorPersonasTotales--;		
+		contadoresPersonasPuerta.put(puerta, contadoresPersonasPuerta.get(puerta)-1);
+		
+		// Imprimimos el estado del parque
+		imprimirInfo(puerta, "Entrada");
+		
+		checkInvariante();
+		
+		notifyAll();
 		
 	}
 	
@@ -71,23 +94,20 @@ public class Parque implements IParque{
 	
 	protected void checkInvariante() {
 		assert sumarContadoresPuerta() == contadorPersonasTotales : "INV: La suma de contadores de las puertas debe ser igual al valor del contador del parte";
-		// TODO 
-		// TODO
-		
-		
-		
+		// menos que el maximo
+		// mas que el minimo
 	}
 
 	protected void comprobarAntesDeEntrar(){	// TODO
-		//
-		// TODO
-		//
+		while (contadorPersonasTotales >= MAX) {
+			wait();
+		}
 	}
 
 	protected void comprobarAntesDeSalir(){		// TODO
-		//
-		// TODO
-		//
+		while (contadorPersonasTotales >= MAX) {
+			wait();
+		}
 	}
 
 
