@@ -103,13 +103,13 @@ public class Parque implements IParque{
 		assert contadorPersonasTotales >= 0 : "INV: No puede haber menos personas que 0 en el parque";
 	}
 
-	protected void comprobarAntesDeEntrar(){	// TODO
+	protected synchronized void comprobarAntesDeEntrar() throws InterruptedException{		
 		while (contadorPersonasTotales >= MAX) {
 			wait();
 		}
 	}
 
-	protected void comprobarAntesDeSalir(){		// TODO
+	protected synchronized void comprobarAntesDeSalir() throws InterruptedException{			
 		while (contadorPersonasTotales >= MAX) {
 			wait();
 		}
