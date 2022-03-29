@@ -5,6 +5,11 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author Hugo de la Camara Saiz
+ * @author Pablo Santiago Guilarte
+ */
+
 public class Parque implements IParque{
 	
 	private static final int MAX = 50;
@@ -28,8 +33,8 @@ public class Parque implements IParque{
 		
 		try {
 			comprobarAntesDeEntrar();
-		} catch (InterruptedException e) {
-			return;
+		}  catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 				
 		// Aumentamos el contador total y el individual
@@ -46,7 +51,7 @@ public class Parque implements IParque{
 	}
 	
 	@Override
-	public void salirDelParque(String puerta) {
+	public synchronized void salirDelParque(String puerta) {
 
 		// Si no hay entradas por esa puerta, inicializamos
 		if (contadoresPersonasPuerta.get(puerta) == null){
@@ -56,7 +61,7 @@ public class Parque implements IParque{
 		try {
 			comprobarAntesDeSalir();
 		} catch (InterruptedException e) {
-			return;
+			e.printStackTrace();
 		}
 				
 		// Aumentamos el contador total y el individual
@@ -64,7 +69,7 @@ public class Parque implements IParque{
 		contadoresPersonasPuerta.put(puerta, contadoresPersonasPuerta.get(puerta)-1);
 		
 		// Imprimimos el estado del parque
-		imprimirInfo(puerta, "Entrada");
+		imprimirInfo(puerta, "Salida");
 		
 		checkInvariante();
 		
