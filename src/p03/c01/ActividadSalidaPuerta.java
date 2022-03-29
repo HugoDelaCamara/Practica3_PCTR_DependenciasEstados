@@ -5,6 +5,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author Hugo de la Camara Saiz
+ * @author Pablo Santiago Guilarte
+ */
+
 public class ActividadSalidaPuerta{
 
 			private static final int NUMENTRADAS = 20;

@@ -15,12 +15,11 @@ public class Parque implements IParque{
 	private static final int MAX = 50;
 	private int contadorPersonasTotales;
 	private Hashtable<String, Integer> contadoresPersonasPuerta;
-	private int maxi;
 	
-	public Parque() {
+	public Parque(int max) {
 		contadorPersonasTotales = 0;
 		contadoresPersonasPuerta = new Hashtable<String, Integer>();
-		this.maxi = MAX;
+		max = MAX;
 	}
 
 	@Override
@@ -104,13 +103,13 @@ public class Parque implements IParque{
 	}
 
 	protected synchronized void comprobarAntesDeEntrar() throws InterruptedException{		
-		while (contadorPersonasTotales >= MAX) {
+		while (contadorPersonasTotales == MAX) {
 			wait();
 		}
 	}
 
 	protected synchronized void comprobarAntesDeSalir() throws InterruptedException{			
-		while (contadorPersonasTotales >= MAX) {
+		while (contadorPersonasTotales == 0) {
 			wait();
 		}
 	}
